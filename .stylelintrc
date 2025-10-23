@@ -1,0 +1,10 @@
+{
+  "plugins": ["stylelint-prettier"],
+  "rules": {
+    "prettier/prettier": [true, {"singleQuote": true, "tabWidth": 2}]
+  },
+  "extends": [
+    "stylelint-prettier/recommended",
+    "stylelint-config-prettier"
+  ]
+}
