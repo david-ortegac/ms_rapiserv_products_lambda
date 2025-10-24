@@ -33,7 +33,7 @@ export const handler = async (event: any) => {
     // Procesar la petición
     const result = await controller.handleRequest(event);
     return await presenter.response(result, 200);
-    
+
   } catch (error) {
     console.error("Error in handler:", error);
     return {

@@ -11,22 +11,19 @@ export class ProductControllerImpl implements ProductController {
     @inject(TYPES.ProductService)
     private readonly productService: ProductService,
     @inject(TYPES.IAdapterMapper) private readonly mapper: IAdapterMapper,
-  ) {}
+  ) { }
 
   async handleRequest(event: any): Promise<any> {
+    console.log('Event from controller:', event);
     // Detectar método HTTP en diferentes formatos de evento
-    const httpMethod = 
+    const httpMethod =
       event?.requestContext?.http?.method ||  // HTTP API v2 / Function URL
       event?.httpMethod ||                    // REST API v1 / ALB
-      event?.method ||                        // Tests manuales
-      'GET';                                  // Default para eventos vacíos
+      event?.method ||                        // tests/manual
+      "UNKNOWN";                                // Default para eventos vacíos
 
     const pathParameters = event?.pathParameters || event?.path || {};
-    const body = event?.body ? (typeof event.body === 'string' ? JSON.parse(event.body) : event.body) : {};
-
-    console.log('HTTP Method:', httpMethod);
-    console.log('Path Parameters:', pathParameters);
-    console.log('Body:', body);
+    const body = event?.body || {};
 
     try {
       switch (httpMethod) {
@@ -39,12 +36,12 @@ export class ProductControllerImpl implements ProductController {
             return { products };
           }
         }
-        
+
         case 'POST': {
           const createdProduct = await this.createProduct(body);
           return { product: createdProduct };
         }
-        
+
         case 'PUT': {
           if (pathParameters.id) {
             const updatedProduct = await this.updateProduct(Number.parseInt(pathParameters.id), body);
@@ -52,7 +49,7 @@ export class ProductControllerImpl implements ProductController {
           }
           throw new Error('ID is required for PUT request');
         }
-        
+
         case 'DELETE': {
           if (pathParameters.id) {
             await this.deleteProduct(Number.parseInt(pathParameters.id));
@@ -60,7 +57,7 @@ export class ProductControllerImpl implements ProductController {
           }
           throw new Error('ID is required for DELETE request');
         }
-        
+
         default:
           throw new Error(`Unsupported HTTP method: ${httpMethod}`);
       }
