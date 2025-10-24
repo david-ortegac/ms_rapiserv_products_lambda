@@ -1,5 +1,5 @@
-import { DomainProductEntity } from "../../../domain/Entities/DomainProductEntity";
-import { Product } from "../Entity/Product";
+import { DomainProductEntity } from '../../../domain/Entities/DomainProductEntity';
+import { Product } from '../Entity/Product';
 
 export interface IInfraestructureMapper {
   toDomain(entity: Product): DomainProductEntity;

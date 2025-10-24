@@ -1,7 +1,6 @@
-import { Repository } from "typeorm";
-import { Product } from "../Entity/Product";
+import { Product } from '../Entity/Product';
 
-export interface MysqlProductRespository  {
+export interface MysqlProductRespository {
   findById(id: number): Promise<Product | null>;
   findAll(): Promise<Product[]>;
   create(product: Product): Promise<Product>;
