@@ -1,0 +1,26 @@
+{
+  "functionName": "ms-products-lambda",
+  "runtime": "nodejs22.x",
+  "handler": "index.handler",
+  "description": "Microservicio de productos con TypeORM y InversifyJS",
+  "timeout": 30,
+  "memorySize": 512,
+  "environment": {
+    "NODE_ENV": "production",
+    "STAGE": "prod",
+    "DB_HOST": "www.davidortega.dev",
+    "DB_PORT": "3306",
+    "DB_USERNAME": "davidort_aws_lambda",
+    "DB_DATABASE": "davidort_aws_lambda"
+  },
+  "vpc": {
+    "securityGroupIds": [],
+    "subnetIds": []
+  },
+  "layers": [],
+  "tags": {
+    "Environment": "production",
+    "Service": "products",
+    "Team": "backend"
+  }
+}
