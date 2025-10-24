@@ -1,6 +1,6 @@
-import { DomainProductEntity } from "../../../domain/Entities/DomainProductEntity";
-import { Product } from "../Entity/Product";
-import { IInfraestructureMapper } from "./IIfraestructureMapper";
+import { DomainProductEntity } from '../../../domain/Entities/DomainProductEntity';
+import { Product } from '../Entity/Product';
+import { IInfraestructureMapper } from './IIfraestructureMapper';
 
 export class InfraestructureMapperImpl implements IInfraestructureMapper {
   toDomain(entity: Product): DomainProductEntity {

@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
-import { TYPES } from "../../../../ioc/Types";
+
 import { ProductService } from "../../../../application/services/IProductService";
+import { TYPES } from "../../../../ioc/Types";
 import { AdapterProductEntity } from "./Entity/AdapterProductEntity";
 import { IAdapterMapper } from "./Mapper/IAdapterMapper";
 import { ProductController } from "./ProductController";
@@ -11,58 +12,64 @@ export class ProductControllerImpl implements ProductController {
     @inject(TYPES.ProductService)
     private readonly productService: ProductService,
     @inject(TYPES.IAdapterMapper) private readonly mapper: IAdapterMapper,
-  ) { }
+  ) {}
 
   async handleRequest(event: any): Promise<any> {
-    console.log('Event from controller:', event);
-    // Detectar método HTTP en diferentes formatos de evento
-    const httpMethod =
-      event?.requestContext?.http?.method ||  // HTTP API v2 / Function URL
-      event?.httpMethod ||                    // REST API v1 / ALB
-      event?.method ||                        // tests/manual
-      "UNKNOWN";                                // Default para eventos vacíos
-
-    const pathParameters = event?.pathParameters || event?.path || {};
-    const body = event?.body || {};
-
     try {
-      switch (httpMethod) {
-        case 'GET': {
-          if (pathParameters.id) {
-            const product = await this.getProductById(Number.parseInt(pathParameters.id));
-            return { product };
+      switch (event?.requestContext?.http?.method) {
+        case "GET": {
+          if (event?.pathParameters?.id) {
+            const product = await this.getProductById(
+              Number.parseInt(event?.pathParameters?.id),
+            );
+            return product;
           } else {
             const products = await this.getProducts();
-            return { products };
+            return products;
           }
         }
 
-        case 'POST': {
-          const createdProduct = await this.createProduct(body);
-          return { product: createdProduct };
+        case "POST": {
+          const createdProduct = await this.createProduct(
+            JSON.parse(event?.body),
+          );
+          return createdProduct;
         }
 
-        case 'PUT': {
-          if (pathParameters.id) {
-            const updatedProduct = await this.updateProduct(Number.parseInt(pathParameters.id), body);
-            return { product: updatedProduct };
+        case "PUT": {
+          if (event?.pathParameters?.id) {
+            const updatedProduct = await this.updateProduct(
+              Number.parseInt(event?.pathParameters?.id),
+              JSON.parse(event?.body),
+            );
+            return updatedProduct;
           }
-          throw new Error('ID is required for PUT request');
+          return "ID is required for PUT request";
         }
 
-        case 'DELETE': {
-          if (pathParameters.id) {
-            await this.deleteProduct(Number.parseInt(pathParameters.id));
-            return { message: 'Product deleted successfully' };
+        case "DELETE": {
+          if (event?.pathParameters?.id) {
+            await this.deleteProduct(
+              Number.parseInt(event?.pathParameters?.id),
+            );
+            return {
+              message: "Product deleted successfully",
+            };
           }
-          throw new Error('ID is required for DELETE request');
+          return {
+            message: "ID is required for DELETE request",
+          };
         }
 
         default:
-          throw new Error(`Unsupported HTTP method: ${httpMethod}`);
+          return {
+            message: `Unsupported HTTP method: ${event?.requestContext?.http?.method}`,
+          };
       }
     } catch (error) {
-      throw new Error(`Error processing request: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return {
+        message: `Error processing request: ${error instanceof Error ? error.message : "Unknown error"}`,
+      };
     }
   }
 
@@ -89,7 +96,9 @@ export class ProductControllerImpl implements ProductController {
     id: number,
     product: AdapterProductEntity,
   ): Promise<AdapterProductEntity> {
+    console.log("product from controller", product);
     const productEntity = this.mapper.toDomain(product);
+    console.log("productEntity from controller", productEntity);
     const updatedProduct = await this.productService.updateProduct(
       id,
       productEntity,

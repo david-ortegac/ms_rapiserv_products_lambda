@@ -1,9 +1,10 @@
 import { inject, injectable } from "inversify";
+
 import { ProductService } from "../application/services/IProductService";
-import { MysqlProductRespository } from "../infraestructure/mysql/Respository/MysqlProductRespository";
-import { DomainProductEntity } from "./Entities/DomainProductEntity";
-import { TYPES } from "../ioc/Types";
 import { InfraestructureMapperImpl } from "../infraestructure/mysql/Mapper/InfraestructureMapperImpl";
+import { MysqlProductRespository } from "../infraestructure/mysql/Respository/MysqlProductRespository";
+import { TYPES } from "../ioc/Types";
+import { DomainProductEntity } from "./Entities/DomainProductEntity";
 
 @injectable()
 export class ProductServiceImpl implements ProductService {
@@ -33,7 +34,9 @@ export class ProductServiceImpl implements ProductService {
   async createProduct(
     product: DomainProductEntity,
   ): Promise<DomainProductEntity> {
+    console.log("product from domain service", product);
     const entity = this.mapper.toEntity(product);
+    console.log("entity from domain service", entity);
     const createdProduct = await this.repository.create(entity);
     return this.mapper.toDomain(createdProduct);
   }

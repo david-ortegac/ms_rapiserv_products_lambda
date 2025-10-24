@@ -1,6 +1,6 @@
-import { DomainProductEntity } from "../../../../../domain/Entities/DomainProductEntity";
-import { AdapterProductEntity } from "../Entity/AdapterProductEntity";
-import { IAdapterMapper } from "./IAdapterMapper";
+import { DomainProductEntity } from '../../../../../domain/Entities/DomainProductEntity';
+import { AdapterProductEntity } from '../Entity/AdapterProductEntity';
+import { IAdapterMapper } from './IAdapterMapper';
 
 export class AdapterMapperImpl implements IAdapterMapper {
   toDomain(adapterEntity: AdapterProductEntity): DomainProductEntity {

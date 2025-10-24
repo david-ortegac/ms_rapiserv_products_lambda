@@ -1,9 +1,10 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
 import "reflect-metadata";
+
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("products")
 export class Product {
-  @PrimaryColumn({ type: "bigint", width: 18 })
+  @PrimaryGeneratedColumn({ type: "bigint" })
   id!: number;
 
   @Column({ type: "varchar", length: 255 })

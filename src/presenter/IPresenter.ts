@@ -1,3 +1,5 @@
+import { Response } from "../models/Response";
+
 export interface IPresenter {
-  response(data: string, statusCode: number): Promise<any>;
+  generateResponse(data: object): Promise<Response>;
 }
