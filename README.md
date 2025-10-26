@@ -14,7 +14,7 @@ Este proyecto sigue una **arquitectura hexagonal (Clean Architecture)** con las 
 
 ## 📋 Requisitos Previos
 
-- Node.js 18.x o superior
+- Node.js 20.x o superior
 - npm o yarn
 - Acceso a base de datos MySQL
 
