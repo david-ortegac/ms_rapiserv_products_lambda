@@ -6,7 +6,6 @@ export const TYPES = {
   IInfrastructureMapper: Symbol.for('IInfrastructureMapper'),
   IAdapterMapper: Symbol.for('IAdapterMapper'),
   ProductController: Symbol.for('ProductController'),
-  IPresenter: Symbol.for('IPresenter'),
   DataSource: Symbol.for('DataSource'),
   RepositoryProduct: Symbol.for('Repository<Product>'),
 };

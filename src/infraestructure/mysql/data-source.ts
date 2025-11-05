@@ -1,18 +1,18 @@
-import "reflect-metadata";
+import 'reflect-metadata';
 
-import { DataSource } from "typeorm";
+import { DataSource } from 'typeorm';
 
-import { Product } from "./Entity/Product";
+import { Product } from './Entity/Product';
 
 export const AppDataSource = new DataSource({
-  type: "mysql",
+  type: 'mysql',
   host: process.env.DB_HOST,
-  port: Number.parseInt(process.env.DB_PORT || "3306"),
+  port: Number.parseInt(process.env.DB_PORT || '3306'),
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  synchronize: process.env.NODE_ENV !== "production", // Solo en desarrollo
-  logging: process.env.NODE_ENV === "development",
+  synchronize: process.env.NODE_ENV !== 'production', // Solo en desarrollo
+  logging: process.env.NODE_ENV === 'development',
   entities: [Product],
   migrations: [],
   subscribers: [],

@@ -1,27 +1,25 @@
-import { inject, injectable } from "inversify";
+import { inject, injectable } from 'inversify';
 
-import { ProductService } from "../../../../application/services/IProductService";
-import { TYPES } from "../../../../ioc/Types";
-import { AdapterProductEntity } from "./Entity/AdapterProductEntity";
-import { IAdapterMapper } from "./Mapper/IAdapterMapper";
-import { ProductController } from "./ProductController";
+import { ProductService } from '../../../../application/services/IProductService';
+import { TYPES } from '../../../../ioc/Types';
+import { AdapterProductEntity } from './Entity/AdapterProductEntity';
+import { IAdapterMapper } from './Mapper/IAdapterMapper';
+import { ProductController } from './ProductController';
 
 @injectable()
 export class ProductControllerImpl implements ProductController {
   constructor(
     @inject(TYPES.ProductService)
     private readonly productService: ProductService,
-    @inject(TYPES.IAdapterMapper) private readonly mapper: IAdapterMapper,
+    @inject(TYPES.IAdapterMapper) private readonly mapper: IAdapterMapper
   ) {}
 
   async handleRequest(event: any): Promise<any> {
     try {
       switch (event?.requestContext?.http?.method) {
-        case "GET": {
+        case 'GET': {
           if (event?.pathParameters?.id) {
-            const product = await this.getProductById(
-              Number.parseInt(event?.pathParameters?.id),
-            );
+            const product = await this.getProductById(Number.parseInt(event?.pathParameters?.id));
             return product;
           } else {
             const products = await this.getProducts();
@@ -29,35 +27,31 @@ export class ProductControllerImpl implements ProductController {
           }
         }
 
-        case "POST": {
-          const createdProduct = await this.createProduct(
-            JSON.parse(event?.body),
-          );
+        case 'POST': {
+          const createdProduct = await this.createProduct(JSON.parse(event?.body));
           return createdProduct;
         }
 
-        case "PUT": {
+        case 'PUT': {
           if (event?.pathParameters?.id) {
             const updatedProduct = await this.updateProduct(
               Number.parseInt(event?.pathParameters?.id),
-              JSON.parse(event?.body),
+              JSON.parse(event?.body)
             );
             return updatedProduct;
           }
-          return "ID is required for PUT request";
+          return 'ID is required for PUT request';
         }
 
-        case "DELETE": {
+        case 'DELETE': {
           if (event?.pathParameters?.id) {
-            await this.deleteProduct(
-              Number.parseInt(event?.pathParameters?.id),
-            );
+            await this.deleteProduct(Number.parseInt(event?.pathParameters?.id));
             return {
-              message: "Product deleted successfully",
+              message: 'Product deleted successfully',
             };
           }
           return {
-            message: "ID is required for DELETE request",
+            message: 'ID is required for DELETE request',
           };
         }
 
@@ -68,7 +62,7 @@ export class ProductControllerImpl implements ProductController {
       }
     } catch (error) {
       return {
-        message: `Error processing request: ${error instanceof Error ? error.message : "Unknown error"}`,
+        message: `Error processing request: ${error instanceof Error ? error.message : 'Unknown error'}`,
       };
     }
   }
@@ -83,26 +77,17 @@ export class ProductControllerImpl implements ProductController {
     return this.mapper.toAdapter(product);
   }
 
-  async createProduct(
-    product: AdapterProductEntity,
-  ): Promise<AdapterProductEntity> {
+  async createProduct(product: AdapterProductEntity): Promise<AdapterProductEntity> {
     const productEntity = this.mapper.toDomain(product);
-    const createdProduct =
-      await this.productService.createProduct(productEntity);
+    const createdProduct = await this.productService.createProduct(productEntity);
     return this.mapper.toAdapter(createdProduct);
   }
 
-  async updateProduct(
-    id: number,
-    product: AdapterProductEntity,
-  ): Promise<AdapterProductEntity> {
-    console.log("product from controller", product);
+  async updateProduct(id: number, product: AdapterProductEntity): Promise<AdapterProductEntity> {
+    console.log('product from controller', product);
     const productEntity = this.mapper.toDomain(product);
-    console.log("productEntity from controller", productEntity);
-    const updatedProduct = await this.productService.updateProduct(
-      id,
-      productEntity,
-    );
+    console.log('productEntity from controller', productEntity);
+    const updatedProduct = await this.productService.updateProduct(id, productEntity);
     return this.mapper.toAdapter(updatedProduct);
   }
 

@@ -1,15 +1,15 @@
-import { inject, injectable } from "inversify";
-import { Repository } from "typeorm";
+import { inject, injectable } from 'inversify';
+import { Repository } from 'typeorm';
 
-import { TYPES } from "../../../ioc/Types";
-import { Product } from "../Entity/Product";
-import { MysqlProductRespository } from "./MysqlProductRespository";
+import { TYPES } from '../../../ioc/Types';
+import { Product } from '../Entity/Product';
+import { MysqlProductRespository } from './MysqlProductRespository';
 
 @injectable()
 export class MysqlProductRespositoryImpl implements MysqlProductRespository {
   constructor(
     @inject(TYPES.RepositoryProduct)
-    private readonly productRepository: Repository<Product>,
+    private readonly productRepository: Repository<Product>
   ) {}
 
   async findById(id: number): Promise<Product | null> {
@@ -21,7 +21,7 @@ export class MysqlProductRespositoryImpl implements MysqlProductRespository {
   }
 
   async create(product: Product): Promise<Product> {
-    console.log("product from repository", product);
+    console.log('product from repository', product);
     return await this.productRepository.save(product);
   }
 
